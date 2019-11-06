@@ -8,6 +8,7 @@ public class Graph {
 		start = -1;
 		end = -1;
 		adjacencyMatrix = null;
+		nbAnts = 0;
 	}
 
 	public void	initMatrix() {
@@ -48,6 +49,7 @@ public class Graph {
 	}
 
 	public void	display() {
+		System.out.println(nbAnts);
 		for (Node n : nodes)
 			System.out.println(n.getName() + " " + n.getId());
 		for (int i = 0; i < nbNodes; ++i) {
@@ -57,9 +59,18 @@ public class Graph {
 		}
 	}
 
+	public void	setAnts(int n) {
+		nbAnts = n;
+	}
+
+	public int	getAnts() {
+		return (nbAnts);
+	}
+
 	private int				nbNodes;
 	private ArrayList<Node>	nodes;
 	private int[][]			adjacencyMatrix;
 	private int				start;
 	private int				end;
+	private int				nbAnts;
 }

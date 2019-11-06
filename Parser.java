@@ -8,10 +8,23 @@ public class Parser {
 		Scanner			in = new Scanner(System.in);
 		final Pattern	nodePattern = Pattern.compile("[\\w]+ [\\d]+ [\\d]+");
 		final Pattern	edgePattern = Pattern.compile("[\\w]+-[\\w]+");
-		final Pattern	commentPattern = Pattern.compile("##?[\\w\\s]*");
+		final Pattern	commentPattern = Pattern.compile("##?.*");
 		String			line;
 		int				status = 0;
 
+		// Ants parsing
+		while (in.hasNext()) {
+			line = in.nextLine();
+			if (!commentPattern.matcher(line).matches()) {
+				if (Pattern.matches("[\\d]+", line))
+					g.setAnts(Integer.parseInt(line));
+				else
+					System.err.println("Lem-in: invalid ant number: " + line);
+				break ;
+			}
+		}
+
+		// Nodes parsing
 		while (in.hasNext() && !in.hasNext(edgePattern)) {
 			line = in.nextLine();
 			if (nodePattern.matcher(line).matches())
@@ -29,6 +42,7 @@ public class Parser {
 				System.err.println("Lem-in: invalid line: " + line);
 		}
 		
+		// Edges parsing
 		g.initMatrix();
 		while (in.hasNext()) {
 			line = in.nextLine();
