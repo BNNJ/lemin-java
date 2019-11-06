@@ -16,17 +16,19 @@ public class Parser {
 		while (in.hasNext()) {
 			line = in.nextLine();
 			if (!commentPattern.matcher(line).matches()) {
-				if (Pattern.matches("[\\d]+", line))
+				if (Pattern.matches("[\\d]+", line)) {
 					g.setAnts(Integer.parseInt(line));
+					break ;
+				}
 				else
-					System.err.println("Lem-in: invalid ant number: " + line);
-				break ;
+					return (g);
 			}
 		}
 
 		// Nodes parsing
 		while (in.hasNext() && !in.hasNext(edgePattern)) {
 			line = in.nextLine();
+			System.out.println(line);
 			if (nodePattern.matcher(line).matches())
 				try {
 					g.addNode(line.substring(0, line.indexOf(' ')), status);
@@ -39,21 +41,22 @@ public class Parser {
 				else if (line.toLowerCase().equals("##end"))
 					status = 2;
 			} else
-				System.err.println("Lem-in: invalid line: " + line);
+				System.err.println("lemin: Warning: invalid line: " + line);
 		}
 		
 		// Edges parsing
 		g.initMatrix();
 		while (in.hasNext()) {
 			line = in.nextLine();
+			System.out.println(line);
 			if (edgePattern.matcher(line).matches())
 				try {
 					g.addEdge(line);
 				} catch (InvalidLineException e) {
-					System.err.println("Lem-in: " + e.getError());
+					System.err.println("lemin: Warning: " + e.getError());
 				}
 			else if (!commentPattern.matcher(line).matches())
-				System.err.println("Lem-in: invalid line: " + line);
+				System.err.println("lemin: Warning: invalid line: " + line);
 		}
 		in.close();
 		return (g);

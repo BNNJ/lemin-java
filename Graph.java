@@ -67,10 +67,27 @@ public class Graph {
 		return (nbAnts);
 	}
 
+	public boolean	isValid() {
+		if (nbAnts <= 0) {
+			errorMessage = "Invalid number of ants: " + nbAnts;
+			return (false);
+		}
+		else if (nbNodes <= 2) {
+			errorMessage = "Not enough rooms: " + nbNodes;
+			return (false);
+		}
+		return (true);
+	}
+
+	public String	getError() {
+		return (errorMessage);
+	}
+
 	private int				nbNodes;
 	private ArrayList<Node>	nodes;
 	private int[][]			adjacencyMatrix;
 	private int				start;
 	private int				end;
 	private int				nbAnts;
+	private String			errorMessage;
 }
