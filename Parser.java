@@ -58,14 +58,4 @@ public class Parser {
 		in.close();
 		return (g);
 	}
-
-	private static void	parseNodes(Pattern nodePattern,
-				Pattern edgePattern, Pattern commentPattern) {
-		
-	}
-
-	private static void	parseEdges(Pattern edgePattern, Pattern commentPattern) {
-		String	line;
-
-	}
 }
