@@ -8,15 +8,6 @@ public class	Path {
 		startRoom = room;
 	}
 
-	public void	print(Graph g) {
-		Node	n = g.nodeAt(startRoom);
-
-		while (n.getNext() != -1) {
-			System.out.println(n.getName());
-			n = g.nodeAt(n.getNext());
-		}
-	}
-
 	public void	setLength(int len) {
 		length = len;
 	}

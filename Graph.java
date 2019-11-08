@@ -71,8 +71,6 @@ public class Graph {
 			currId = queue.poll();
 			Node	currNode = nodes.get(currId);
 
-//			if (currNode.getStatus(Node.VISITED))
-//				continue ;
 			if (currId == end)
 				break ;
 			currNode.addStatus(Node.VISITED);
@@ -84,22 +82,17 @@ public class Graph {
 				}
 			}
 		}
-		System.out.println("### BFS END ##");
 		return (currId == end ? path : null);
 	}
 
-	public int	makePath(int[] path, int start, int end) {
+	public void	updateCapacity(int[] path, int start, int end) {
 		int	current = end;
 
-		while (true) {
+		while (current != start) {
 			int	prev = path[current];
 			--edges[prev][current];
 			++edges[current][prev];
-			System.out.println(">> " + nodes.get(current).getName()
-							+ " <- " + nodes.get(prev).getName());
-			nodes.get(current).addStatus(Node.USED);
-			if (prev == start)
-				return (current);
+			nodes.get(prev).setNext(current);
 			current = prev;
 		}
 	}

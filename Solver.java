@@ -2,70 +2,79 @@ import java.util.ArrayList;
 
 public class	Solver {
 
-	private static int		nbSteps = Integer.MAX_VALUE;
-	private static int		nbPaths;
-	private static int[][]	savedState;
+	private static ArrayList<Path>	paths;
+	private static int				nbPaths;
+	private static int				nbSteps = Integer.MAX_VALUE;
+	private static int[][]			pathMatrix;
 
 	public static void	solve(Graph g, int start, int end, int nbAnts) {
-//		g.print();
 		g = g.splitNodes();
 		start = (start << 1) + 1;
 		end = (end << 1);
 		g.unlinkBounds(start, end);
-//		g.print();
 
-
-		System.out.println("> start: " + g.nodeAt(start).getName()
-							+ " end: " + g.nodeAt(end).getName());
-
-		ArrayList<Path> paths = findPaths(g, start, end, nbAnts);
+		paths = new ArrayList<Path>();
+		pathMatrix = new int[g.getNbNodes()][g.getNbNodes() 	];
+		findPaths(g, start, end, nbAnts);
 
 		for (Path p : paths) {
-			p.print(g);
-			System.out.println("#############");
-		}
-	}
-
-	public static ArrayList<Path>	findPaths(Graph g, int start, int end,
-			int nbAnts) {
-		ArrayList<Path>	paths = new ArrayList<Path>();
-
-		for (int i = 0; i < nbAnts; ++i) {
-			System.err.println("######## E-K LOOP START ######");
-			int	p[] = g.bfs(start, end);
-			if (p == null)
-				break ;
-			paths.add(new Path(g.makePath(p, start, end)));
-			updatePaths(g, paths, end);
-			int	tmpSteps = calculateSteps(paths, nbAnts);
-			if (tmpSteps < 0)
-				break ;
-			else if (tmpSteps < nbSteps) {
-				savedState = g.copyMatrix();
-				nbSteps = tmpSteps;
-				nbPaths = paths.size();
-			System.err.println("######## E-K LOOP END ######");
+			int	curr = p.getStart();
+			System.out.println("\npath length: " + p.getLength());
+			while (curr != end) {
+				System.out.println("> " + g.nodeAt(curr).getName());
+				curr = g.nodeAt(curr).getNext();
 			}
 		}
-//		g.print();
-		g.replaceMatrix(savedState);
-		while (paths.size() != nbPaths)
-			paths.remove(paths.size() - 1);
-		updatePaths(g, paths, end);
-		return (paths);
 	}
 
-	public static void	updatePaths(Graph g, ArrayList<Path> paths, int end) {
+	public static void	findPaths(Graph g, int start, int end, int nbAnts) {
+		int[][]	tmpMatrix = new int[g.getNbNodes()][g.getNbNodes()];
+		int		tmpSteps;
+
+		for (int i = 0; i < nbAnts; ++i) {
+			int[]	p = g.bfs(start, end);
+			if (p == null)
+				break ;
+			
+			g.updateCapacity(p, start, end);
+
+			paths.add(makePath(g, tmpMatrix, start, end));
+			updatePaths(g, tmpMatrix, start, end);
+			
+			tmpSteps = calculateSteps(nbAnts);
+			if (tmpSteps < 0)
+				break ;
+			else if (tmpSteps < nbSteps)
+				saveState(tmpMatrix, tmpSteps, paths.size(), g.getNbNodes());
+		}
+
+		while (paths.size() != nbPaths)
+			paths.remove(paths.size() - 1);
+		updatePaths(g, pathMatrix, start, end);
+	}
+
+	public static Path	makePath(Graph g, int[][] m, int start, int end) {
+		int		current = start;
+		int		next;
+
+		while (current != end) {
+			next = g.nodeAt(current).getNext();
+			m[current][next] = m[next][current] ^ 1;
+			m[next][current] = 0;
+			current = next;
+		}
+		return (new Path(g.nodeAt(start).getNext()));
+	}
+
+	public static void	updatePaths(Graph g, int[][] m, int start, int end) {
 		for (Path p : paths) {
-			int		len = 1;
+			int		len = 0;
 			int		currId = p.getStart();
 			Node	currNode = g.nodeAt(currId);
 
-			System.err.println("## UPDATE START ##");
 			while (currId != end) {
 				for (int n : currNode.getNeighbors()) {
-					if (g.getEdge(currId, n) <= 0
-							&& g.nodeAt(n).getStatus(Node.USED)) {
+					if (m[currId][n] == 1) {
 						currNode.setNext(n);
 						break ;
 					}
@@ -74,12 +83,20 @@ public class	Solver {
 				currNode = g.nodeAt(currId);
 				++len;
 			}
-			System.err.println("## UPDATE END ##");
-			p.setLength(len / 2);
+			p.setLength((len >> 1) + 1);
 		}
 	}
 
-	public static int	calculateSteps(ArrayList<Path> paths, int nbAnts) {
+	public static void	saveState(int[][] m, int s, int p, int size) {
+		nbSteps = s;
+		nbPaths = p;
+
+		for (int i = 0; i < size; ++i)
+			for (int j = 0; j < size; ++j)
+				pathMatrix[i][j] = m[i][j];
+	}
+
+	public static int	calculateSteps(int totalAnts) {
 		int	longest = 0;
 		int	nbRooms = 0;
 
@@ -90,7 +107,7 @@ public class	Solver {
 		}
 
 		int	baseAnts = longest * paths.size() - nbRooms;
-		int	extraAnts = nbAnts - baseAnts;
+		int	extraAnts = totalAnts - baseAnts;
 		return (extraAnts < 0 ? -1
 			: longest - 1 + extraAnts / paths.size()
 				+ (extraAnts % paths.size() != 0 ? 1 : 0));
