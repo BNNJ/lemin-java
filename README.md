@@ -7,6 +7,7 @@ Only one ant is allowed in each room at any given time\
 The maze is read from the standard input
 
 notes:\
+This was coded with 4 spaces tabs identation, wich messes up github formatting.\
 This is my first java program. I chose this project because I had been wanting to revisit it for a while with a different algorithm.\
 Appart from implementation, this version also has a few minor differences with the one submited to 42:\
 The parser is less restrictive, as invalid lines don't raise an error and stop the processing. A simple warning is issued.\
