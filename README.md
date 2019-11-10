@@ -1,7 +1,7 @@
 # lemin-java
 Java version of 42 C project lem-in
 
-[subject in english](https://github.com/BNNJ/lemin-java/blob/master/subject/lem-in.en.pdf)
+[subject in english](https://github.com/BNNJ/lemin-java/blob/master/subject/lem-in.en.pdf)\
 [subject in french](https://github.com/BNNJ/lemin-java/blob/master/subject/lem-in.fr.pdf)
 
 Lemin is a path finding program for ants !\
