@@ -1,30 +1,36 @@
+import java.util.List;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 public class	Solver {
 
-	private static ArrayList<Path>	paths;
-	private static int				nbPaths;
-	private static int				nbSteps = Integer.MAX_VALUE;
-	private static int[][]			pathMatrix;
+	private static List<Path>	paths;
+	private static int			nbPaths;
+	private static int			nbSteps = Integer.MAX_VALUE;
+	private static int[][]		pathMatrix;
 
 	public static void	solve(Graph g, int start, int end, int nbAnts) {
 		g = g.splitNodes();
 		start = (start << 1) + 1;
 		end = (end << 1);
 		g.unlinkBounds(start, end);
+	//	g.print();
 
-		paths = new ArrayList<Path>();
+		paths = new ArrayList<>();
 		pathMatrix = new int[g.getNbNodes()][g.getNbNodes() 	];
 		findPaths(g, start, end, nbAnts);
 
+		reducePaths(end);
 		for (Path p : paths) {
-			int	curr = p.getStart();
+			Node	curr = p.getStart();
 			System.out.println("\npath length: " + p.getLength());
-			while (curr != end) {
-				System.out.println("> " + g.nodeAt(curr).getName());
-				curr = g.nodeAt(curr).getNext();
+			while (curr.getId() != end) {
+				System.out.println("> " + curr.getName());
+				curr = curr.getNext();
 			}
 		}
+		sendAnts(nbAnts, end);
 	}
 
 	public static void	findPaths(Graph g, int start, int end, int nbAnts) {
@@ -54,14 +60,16 @@ public class	Solver {
 	}
 
 	public static Path	makePath(Graph g, int[][] m, int start, int end) {
-		int		current = start;
-		int		next;
+		Node	currNode = g.nodeAt(start);
+		int		currId = currNode.getId();
+		int		nextId = currNode.getNext().getId();
 
-		while (current != end) {
-			next = g.nodeAt(current).getNext();
-			m[current][next] = m[next][current] ^ 1;
-			m[next][current] = 0;
-			current = next;
+		while (nextId != end) {
+			nextId = currNode.getNext().getId();
+			currId = currNode.getId();
+			m[currId][nextId] = m[nextId][currId] ^ 1;
+			m[nextId][currId] = 0;
+			currNode = currNode.getNext();
 		}
 		return (new Path(g.nodeAt(start).getNext()));
 	}
@@ -69,20 +77,21 @@ public class	Solver {
 	public static void	updatePaths(Graph g, int[][] m, int start, int end) {
 		for (Path p : paths) {
 			int		len = 0;
-			int		currId = p.getStart();
-			Node	currNode = g.nodeAt(currId);
+			Node	currNode = p.getStart();
+			int		currId = currNode.getId();
 
 			while (currId != end) {
 				for (int n : currNode.getNeighbors()) {
 					if (m[currId][n] == 1) {
-						currNode.setNext(n);
+						currNode.setNext(g.nodeAt(n));
 						break ;
 					}
 				}
-				currId = currNode.getNext();
-				currNode = g.nodeAt(currId);
+				currNode = currNode.getNext();
+				currId = currNode.getId();
 				++len;
 			}
+			currNode.setNext(g.nodeAt(end));
 			p.setLength((len >> 1) + 1);
 		}
 	}
@@ -111,6 +120,87 @@ public class	Solver {
 		return (extraAnts < 0 ? -1
 			: longest - 1 + extraAnts / paths.size()
 				+ (extraAnts % paths.size() != 0 ? 1 : 0));
+	}
+
+	public static void	reducePaths(int end) {
+		for (Path p : paths) {
+			Node	current = p.getStart();
+			while (current.getId() != end) {
+				current.setNext(current.getNext().getNext());
+				current = current.getNext();
+			}
+			current.setNext(null);
+		}
+	}
+
+	public static void	sendAnts(int nbAnts, int end) {
+		List<List<Ant>>	ants = new ArrayList<>(nbPaths);
+
+		for (int p = 0; p < nbPaths; ++p)
+			ants.add(new ArrayList<Ant>());
+
+		for (int antId = 1, p = 0; antId <= nbAnts; ++p) {
+			if (p >= nbPaths)
+				p = 0;
+			if (ants.get(p).size() + paths.get(p).getLength() <= nbSteps) {
+				ants.get(p).add(new Ant(antId, paths.get(p).getStart(), end));
+				++antId;
+			}
+		}
+
+		for (int step = 0; step < nbSteps; ++step) {
+			for (int p = 0; p < ants.size(); ++p) {
+				if (ants.get(p).isEmpty())
+					continue ;
+				for (int i = 0; i < ants.get(p).size(); ++i) {
+					Ant	ant = ants.get(p).get(i);
+					if (ant.moveForward())
+						break ;
+				}
+				if (ants.get(p).get(0).isArrived())
+					ants.get(p).remove(0);
+			}
+			System.out.println();
+		}
+	}
+
+}
+
+class Ant {
+
+	private	String	name;
+	private	Node	room;
+	private	Node	startRoom;
+	private	int		end;
+
+	public			Ant(int id, Node s, int e) {
+		name = "L" + id;
+		startRoom = s;
+		room = s;
+		end = e;
+	}
+
+	public void		setRoom(Node r) {
+		room = r;
+	}
+
+	public boolean	isWalking() {
+		return (room != startRoom);
+	}
+
+	public boolean	isArrived() {
+		return (room == null);
+	}
+
+	public String	getName() {
+		return (name);
+	}
+
+	public boolean	moveForward() {
+		boolean	isFirstMove = room == startRoom;
+		System.out.print(name + "-" + room.getName() + " ");
+		room = room.getNext();
+		return (isFirstMove);
 	}
 
 }

@@ -9,6 +9,9 @@ public class Lemin {
 	public static void		main(String[] args) {
 		Graph	g = Parser.parse();
 
+		if (args[0].equals("--ants"))
+			nbAnts = Integer.parseInt(args[1]);
+
 		if (dataIsValid(g))
 			Solver.solve(g, start, end, nbAnts);
 		else
