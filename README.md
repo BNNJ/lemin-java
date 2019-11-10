@@ -44,5 +44,6 @@ After an augmenting path has been found, a matrix storing which edges are used i
 
 The probleme in our case is that it finds edge-disjoint paths. We need vertex (node) disjoint paths.\
 To fix that, we process the graph. Each node is split into an input node Vin and an output node Vout. Two edges are added between those two nodes which simulates node capacity, Vin to Vout has capacity 1, and Vout to Vin has capacity 0.\
-All the edges of the original node are duplicated and attributed to Vin and Vout:n\ for Vout outgoing edges have capacity 1, and incoming edges have capacity 0. The opposite is done for Vin.\
+All the edges of the original node are duplicated and attributed to Vin and Vout:\
+for Vout outgoing edges have capacity 1, and incoming edges have capacity 0. The opposite is done for Vin.\
 Now, the problem has been reduced to finding edge dispoint paths, which Edmonds-Karp does.
