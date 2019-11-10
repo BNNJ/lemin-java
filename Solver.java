@@ -15,21 +15,12 @@ public class	Solver {
 		start = (start << 1) + 1;
 		end = (end << 1);
 		g.unlinkBounds(start, end);
-	//	g.print();
 
 		paths = new ArrayList<>();
 		pathMatrix = new int[g.getNbNodes()][g.getNbNodes() 	];
 		findPaths(g, start, end, nbAnts);
 
 		reducePaths(end);
-		for (Path p : paths) {
-			Node	curr = p.getStart();
-			System.out.println("\npath length: " + p.getLength());
-			while (curr.getId() != end) {
-				System.out.println("> " + curr.getName());
-				curr = curr.getNext();
-			}
-		}
 		sendAnts(nbAnts, end);
 	}
 

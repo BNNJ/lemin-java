@@ -26,9 +26,10 @@ public class Parser {
 		/* Ants parsing	*/
 		while (in.hasNext()) {
 			line = in.nextLine();
+			if (Lemin.getOption(Lemin.PRINT))
+				System.out.println(line);
 			if (!commentPattern.matcher(line).matches()) {
 				if (Pattern.matches("[\\d]+", line)) {
-					System.out.println(line);
 					Lemin.setAnts(Integer.parseInt(line));
 					break ;
 				}
@@ -40,7 +41,8 @@ public class Parser {
 		/* Nodes parsing	*/
 		while (in.hasNext() && !in.hasNext(edgePattern)) {
 			line = in.nextLine();
-			System.out.println(line);
+			if (Lemin.getOption(Lemin.PRINT))
+				System.out.println(line);
 			if (nodePattern.matcher(line).matches()) {
 				String	nodeName = line.substring(0, line.indexOf(' '));
 				if (nodeName.charAt(0) != 'L' && g.indexOf(nodeName) < 0)
@@ -60,7 +62,8 @@ public class Parser {
 		/* Edges parsing	*/
 		while (in.hasNext()) {
 			line = in.nextLine();
-			System.out.println(line);
+			if (Lemin.getOption(Lemin.PRINT))
+				System.out.println(line);
 			if (edgePattern.matcher(line).matches()){
 				int	separatorIndex = line.indexOf('-');
 				int	from = g.indexOf(line.substring(0, separatorIndex));
