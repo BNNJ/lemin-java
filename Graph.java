@@ -4,9 +4,9 @@ import java.util.LinkedList;
 
 /**
  * Representation of the maze
+ *
  * the nodes are stored as an ArrayList,
  * the edges as an adjacency matrix, which also serves as a flow capacity matrix
- * and a 'snapshot' of a certain state of the graph.
  */
 public class Graph {
 
@@ -21,12 +21,16 @@ public class Graph {
 	}
 
 	/**
-	 * Makes a new directed graph from an undirected one
+	 * Makes a new grah where each node has been split to simulate node capacity
 	 *
-	 * Each node is split into two nodes, one for input and one for output:
-	 * The edges to its neighbors are attached to the output,
-	 * and the edges from its neighbors point to the input.
-	 * And edge is added from each input to its corresponding output.
+	 * Each node V is split into two nodes Vin and Vout
+	 * All of its edges are also duplicated:
+	 * incoming edges point to Vin with capacity 1 and Vout with capacity 0
+	 * outgoing edges point to Vin with capacity 0 and Vout with capacity 1
+	 * An edge is added between Vin and Vout,
+	 * with capacity 1 from Vin to Vout and 0 from Vout to Vin.
+	 *
+	 * @return the new version of the graph
 	 */
 	public Graph	splitNodes() {
 		Graph g = new Graph();
@@ -50,6 +54,9 @@ public class Graph {
 		return (g);
 	}
 
+	/**
+	 * Start in and End out are dissociated from the rest of the graph
+	 */
 	public void		unlinkBounds(int start, int end) {
 		for (int i = 0; i < nbNodes; ++i) {
 			edges[start - 1][i] = 0;
@@ -59,6 +66,12 @@ public class Graph {
 		}
 	}
 
+	/**
+	 * A Breadth First Search algorithm that uses the flow capacity to
+	 * find the shortest path between two nodes.
+	 *
+	 * @return An array of ints, representing the path found
+	 */
 	public int[]	bfs(int start, int end) {
 		int[]				path = new int[nbNodes];
 		LinkedList<Integer>	queue = new LinkedList<>();
@@ -86,6 +99,11 @@ public class Graph {
 		return (currId == end ? path : null);
 	}
 
+	/**
+	 * Follows a path and sets each nodes' next, so the path can be retrieved
+	 * later by following the next pointers.
+	 * Edges capacity are updated along the way.
+	 */
 	public void 	updateCapacity(int[] path, int start, int end) {
 		int	current = end;
 
@@ -107,6 +125,11 @@ public class Graph {
 		return (nodes.get(index));
 	}
 
+	/**
+	 * Finds the index of a node using its name.
+	 *
+	 * @return the index of the node if it was found, -1 otherwise.
+	 */
 	public int		indexOf(String name) {
 		for (Node n : nodes)
 			if (n.getName().equals(name))
@@ -129,6 +152,9 @@ public class Graph {
 		return (edges[from][to]);
 	}
 
+	/**
+	 * Prints the graph, for debugging purposes.
+	 */
 	public void		print() {
 		System.err.println("number of nodes: " + nbNodes);
 		for (Node n : nodes) {

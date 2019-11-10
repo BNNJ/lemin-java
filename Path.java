@@ -1,4 +1,11 @@
-
+/**
+ * The path class, representing each path to be taken by the ants.
+ *
+ * Each path is simply represented by its first room after the starting node,
+ * and its length.
+ * The full path can be retrieved by following the Node's next pointer,
+ * which points to the next Node in the path.
+ */
 public class	Path {
 
 	private	Node	startRoom;
@@ -18,16 +25,5 @@ public class	Path {
 
 	public Node		getStart() {
 		return (startRoom);
-	}
-
-	public Node[]	toArray() {
-		Node[]	array = new Node[length];
-		Node	tmp = startRoom;
-
-		for (int i = 0; i < length; ++i) {
-			array[i] = tmp;
-			tmp = tmp.getNext();
-		}
-		return (array);
 	}
 }

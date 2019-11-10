@@ -3,13 +3,30 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
+/**
+ * The solver class
+ *
+ * Contains the methods used to find the paths and send the ants along them.
+ *
+ * I am not very satisfied with how procedural this part of the program is...
+ */
 public class	Solver {
 
 	private static List<Path>	paths;
 	private static int			nbPaths;
 	private static int			nbSteps = Integer.MAX_VALUE;
+	/* the path matrix is used to store the used edges */
 	private static int[][]		pathMatrix;
 
+	/**
+	 * Solver's entry point.
+	 *
+	 * The graph is tramsformed to reduce the problem to a simpler one,
+	 * Start and end must also be changed to reflect the graph modification.
+	 *
+	 * After finding the paths, they then must be transformed to
+	 * match the original graph, before we can send ants through them
+	 */
 	public static void	solve(Graph g, int start, int end, int nbAnts) {
 		g = g.splitNodes();
 		start = (start << 1) + 1;
@@ -24,6 +41,17 @@ public class	Solver {
 		sendAnts(nbAnts, end);
 	}
 
+	/**
+	 * The Edmonds-Karp based algorithm, the heart of the program
+	 *
+	 * At each iteration of its main loop, a bfs is run to find
+	 * the next augmenting path.
+	 * if one is found, the number of steps required to send the ants
+	 * in the graph's current state is calculated.
+	 * If this number of steps is lower than the previous best,
+	 * the current state is saved, so it can be used to restore the
+	 * best path combination after we run out of augmenting paths.
+	 */
 	public static void	findPaths(Graph g, int start, int end, int nbAnts) {
 		int[][]	tmpMatrix = new int[g.getNbNodes()][g.getNbNodes()];
 		int		tmpSteps;
@@ -50,6 +78,11 @@ public class	Solver {
 		updatePaths(g, pathMatrix, start, end);
 	}
 
+	/**
+	 * Adds a path to the path matrix
+	 *
+	 * @return a new path to be added to the path list.
+	 */
 	public static Path	makePath(Graph g, int[][] m, int start, int end) {
 		Node	currNode = g.nodeAt(start);
 		int		currId = currNode.getId();
@@ -65,6 +98,12 @@ public class	Solver {
 		return (new Path(g.nodeAt(start).getNext()));
 	}
 
+	/**
+	 * Sets up the next pointer of each node in each path, and their length.
+	 *
+	 * The length is divided by two then incremented by one,
+	 * to account for the doubled nodes.
+	 */
 	public static void	updatePaths(Graph g, int[][] m, int start, int end) {
 		for (Path p : paths) {
 			int		len = 0;
@@ -113,6 +152,9 @@ public class	Solver {
 				+ (extraAnts % paths.size() != 0 ? 1 : 0));
 	}
 
+	/**
+	 * Reduces the paths to account for the doubled nodes.
+	 */
 	public static void	reducePaths(int end) {
 		for (Path p : paths) {
 			Node	current = p.getStart();
@@ -124,6 +166,20 @@ public class	Solver {
 		}
 	}
 
+	/**
+	 * Finally ! Send the ants !
+	 *
+	 * The ants are split into groups, one for every path.
+	 * The size of those groups depend on the length of the paths they'll
+	 * have to take.
+	 * It is then a simple matter of iterating over each group, moving each
+	 * to the next room. until they're arrived at the destination node.
+	 * They're then removed from the list to make the processing of the
+	 * other ones easier.
+	 *
+	 * This was first done in an unreadable recursive mess, which didn't
+	 * require any data structure (like the Ant class), but this is much cleaner.
+	 */
 	public static void	sendAnts(int nbAnts, int end) {
 		List<List<Ant>>	ants = new ArrayList<>(nbPaths);
 

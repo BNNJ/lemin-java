@@ -1,10 +1,14 @@
-
+/**
+ * Lemin: path finding for ants !
+ *
+ * @author pfragnoud@gmail.com
+ */
 public class Lemin {
 
 	private static String	errorMessage;
 
 	private static int		nbAnts;
-	private static int		overRideAnts;
+	private static int		overrideAnts;
 	private static int		start = -1;
 	private static int		end = -1;
 
@@ -15,6 +19,12 @@ public class Lemin {
 	public static final int	COLOR = 4;
 	public static final int	OVERRIDE_ANTS = 8;
 
+	/**
+	 * main method
+	 *
+	 * Handles the calls to the option parser, the input parser and the solver.
+	 * This is also here that errors are checked and logged.
+	 */
 	public static void		main(final String[] args) {
 		if (!parseOptions(args)) {
 			logError();
@@ -29,7 +39,7 @@ public class Lemin {
 		Graph	g = Parser.parse();
 
 		if (getOption(OVERRIDE_ANTS))
-			nbAnts = overRideAnts;
+			nbAnts = overrideAnts;
 
 		if (dataIsValid(g))
 			Solver.solve(g, start, end, nbAnts);
@@ -52,13 +62,21 @@ public class Lemin {
 			+ "\t-c --color\tcolorize ants");
 	}
 
+	/**
+	 * The arguments/options parser
+	 * 
+	 * Options are stored in a single int, using bits as booleans.
+	 *
+	 * @param args The command line arguments as an array of strings
+	 * @return false if an invalid argument was found, true otherwise
+	 */
 	private static boolean	parseOptions(final String[] args) {
 		for (int i = 0; i < args.length; ++i) {
 			String	arg = args[i];
 			if (arg.startsWith("--")) {
 				if (arg.equals("--ants")) {
 					try {
-						overRideAnts = Integer.parseInt(args[i + 1]);
+						overrideAnts = Integer.parseInt(args[i + 1]);
 						options |= OVERRIDE_ANTS;
 					}
 					catch (NumberFormatException e) {
@@ -96,7 +114,6 @@ public class Lemin {
 	public static boolean	getOption(int opt) {
 		return ((options & opt) != 0);
 	}
-
 
 	private static boolean	dataIsValid(Graph g) {
 		if (nbAnts <= 0) {
