@@ -10,7 +10,8 @@ notes:\
 This is my first java program. I chose this project because I had been wanting to revisit it for a while with a different algorithm.\
 Appart from implementation, this version also has a few minor differences with the one submited to 42:\
 The parser is less restrictive, as invalid lines don't raise an error and stop the processing. A simple warning is issued.\
-Less options, no visualizer. Use the C version if you want a graphical representation of what is going on.
+Less options, no visualizer. Use the C version if you want a graphical representation of what is going on.\
+Although cleaner, this version is also much slower. Wether this is due to the language or the algorithm, i'm not quite sure.
 
 ## Usage
 Compile with\
@@ -37,8 +38,9 @@ Here's the basics of it:\
 1: run a breadth first search on the graph to find the shortest path to the source node to the sink. if a path was found, keep going. Otherwise, there is no augmenting path left, so we stop\
 2: update the edges in this way:\
 &emsp; for each pair of consecutive nodes u and v of the path found,
-&emsp; decrement the capacity of the edge uv by the flow of that path (1 here),\
-&emsp; increment the capacity of the edge vu.\
+&emsp; decrement the capacity of the edge u-v by the flow of that path (1 here),\
+&emsp; increment the capacity of the edge v-u.\
+&emsp; This opens edges to be used in the opposite direction.\
 3: repeat.\
 After an augmenting path has been found, a matrix storing which edges are used is updated, and used to update every path.\
 
