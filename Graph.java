@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -9,12 +10,12 @@ import java.util.LinkedList;
  */
 public class Graph {
 
-	private ArrayList<Node>	nodes;
-	private	int[][]			edges;
-	private int				nbNodes;
+	private List<Node>	nodes;
+	private	int[][]		edges;
+	private int			nbNodes;
 
 	public 			Graph() {
-		nodes = new ArrayList<Node>();
+		nodes = new ArrayList<>();
 		edges = null;
 		nbNodes = 0;
 	}
@@ -31,8 +32,8 @@ public class Graph {
 		Graph g = new Graph();
 
 		for (Node n : nodes) {
-			g.addNode(new Node(n.getName() + "_in", g.getNbNodes()));
-			g.addNode(new Node(n.getName() + "_out", g.getNbNodes()));
+			g.addNode(new Node(n.getName(), g.getNbNodes()));
+			g.addNode(new Node(n.getName(), g.getNbNodes()));
 		}
 		for (int i = 0; i < nbNodes; i++){
 			int from = i << 1;
@@ -60,7 +61,7 @@ public class Graph {
 
 	public int[]	bfs(int start, int end) {
 		int[]				path = new int[nbNodes];
-		LinkedList<Integer>	queue = new LinkedList<Integer>();
+		LinkedList<Integer>	queue = new LinkedList<>();
 		int					currId = start;
 
 		for (Node n : nodes)
@@ -85,14 +86,14 @@ public class Graph {
 		return (currId == end ? path : null);
 	}
 
-	public void	updateCapacity(int[] path, int start, int end) {
+	public void 	updateCapacity(int[] path, int start, int end) {
 		int	current = end;
 
 		while (current != start) {
 			int	prev = path[current];
 			--edges[prev][current];
 			++edges[current][prev];
-			nodes.get(prev).setNext(current);
+			nodes.get(prev).setNext(nodes.get(current));
 			current = prev;
 		}
 	}
@@ -126,21 +127,6 @@ public class Graph {
 
 	public int		getEdge(int from, int to) {
 		return (edges[from][to]);
-	}
-
-	public int[][]	copyMatrix() {
-		int[][]	copy = new int[nbNodes][nbNodes];
-
-		for (int i = 0; i < nbNodes; ++i)
-			for (int j = 0; j < nbNodes; ++j)
-				copy[i][j] = edges[i][j];
-		return (copy);
-	}
-
-	public void		replaceMatrix(int[][] matrix) {
-		for (int i = 0; i < nbNodes; ++i)
-			for (int j = 0; j < nbNodes; ++j)
-				edges[i][j] = matrix[i][j];
 	}
 
 	public void		print() {

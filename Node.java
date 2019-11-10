@@ -1,12 +1,13 @@
+import java.util.List;
 import java.util.ArrayList;
 
 public class Node {
 
-	private String				name;
-	private int					id;
-	private int					next;
-	private ArrayList<Integer>	neighbors;
-	private int					status;
+	private String			name;
+	private int				id;
+	private Node			next;
+	private List<Integer>	neighbors;
+	private int				status;
 
 	public static final int		VISITED = 1;
 	public static final int		QUEUED = 2;
@@ -16,27 +17,27 @@ public class Node {
 	public Node(String nodeName, int nodeId) {
 		name = nodeName;
 		id = nodeId;
-		next = -1;
-		neighbors = new ArrayList<Integer>();
+		next = null;
+		neighbors = new ArrayList<>();
 	}
 
 	public void	addNeighbor(int n) {
 		neighbors.add(n);
 	}
 
-	public ArrayList<Integer>	getNeighbors() {
+	public List<Integer>	getNeighbors() {
 		return (neighbors);
 	}
 
-	public void	setNext(int n) {
+	public void	setNext(Node n) {
 		next = n;
 	}
 
-	public int	getNext() {
+	public Node	getNext() {
 		return (next);
 	}
 
-	public String getName() {
+	public String	getName() {
 		return (name);
 	}
 
