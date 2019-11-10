@@ -59,7 +59,8 @@ public class Lemin {
 		System.err.println("usage:\tjava Lemin [options] [--ants X]\n"
 			+ "\t-h --help\tdisplay help\n"
 			+ "\t-p --print\techo the input to stdout\n"
-			+ "\t-c --color\tcolorize ants");
+			+ "\t-c --color\tcolorize ants\n"
+			+ "\t--ants X\tsets the number of ants to X, if X is a valid integer");
 	}
 
 	/**
