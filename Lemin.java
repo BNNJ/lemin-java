@@ -9,9 +9,10 @@ public class Lemin {
 	private static int		end = -1;
 
 	private static int		options;
-	private static String	optChars = "hp";
+	private static String	optChars = "hpc";
 	public static final int	HELP = 1;
 	public static final int	PRINT = 2;
+	public static final int	COLOR = 4;
 	public static final int	OVERRIDE_ANTS = 8;
 
 	public static void		main(final String[] args) {
@@ -47,7 +48,8 @@ public class Lemin {
 				+ " > cat 'map_file' | java Lemin\n");
 		System.err.println("usage:\tjava Lemin [options] [--ants X]\n"
 			+ "\t-h --help\tdisplay help\n"
-			+ "\t-p --print\techo the input to stdout");
+			+ "\t-p --print\techo the input to stdout\n"
+			+ "\t-c --color\tcolorize ants");
 	}
 
 	private static boolean	parseOptions(final String[] args) {
@@ -69,6 +71,8 @@ public class Lemin {
 					options |= HELP;
 				else if (arg.equals("--print"))
 					options |= PRINT;
+				else if (arg.equals("--color"))
+					options |= COLOR;
 				else {
 					setError("invalid option: " + arg);
 					return (false);

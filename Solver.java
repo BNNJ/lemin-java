@@ -165,7 +165,10 @@ class Ant {
 	private	int		end;
 
 	public			Ant(int id, Node s, int e) {
-		name = "L" + id;
+		if (Lemin.getOption(Lemin.COLOR))
+			name = "\u001B[9" + (id % 7 + 1) + "mL" + id + "\u001B[0m";
+		else
+			name = "L" + id;
 		startRoom = s;
 		room = s;
 		end = e;
