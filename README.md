@@ -5,7 +5,7 @@ Java version of 42 C project lem-in
 Compile with\
 \> javac Lemin.java\
 Run with\
-\> java Lemin < maps/[map_file]
+\> java Lemin [-h/p/c] [--ants X] < maps/[map_file]
 
 
 | Option | Effect |
