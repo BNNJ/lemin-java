@@ -1,10 +1,10 @@
 # lemin-java
-Java version of 42 C project lem-in\
+Java version of 42 C project lem-in
 
 Lemin is a path finding program for ants !\
 It finds the best combination of paths in order to send ants through a maze in the minimum number of moves\
 Only one ant is allowed in each room at any given time\
-The maze is read from the standard input\
+The maze is read from the standard input
 
 notes:\
 This is my first java program. I chose this project because I had been wanting to revisit it for a while with a different algorithm.\
@@ -17,7 +17,7 @@ Although cleaner, this version is also much slower. Wether this is due to the la
 Compile with\
 \> javac Lemin.java\
 Run with\
-\> java Lemin [-h/p/c] [--ants X]\
+\> java Lemin [-h/p/c] [--ants X]
 
 exemple:\
 java Lemin < "mapfile"\
@@ -42,7 +42,7 @@ Here's the basics of it:\
 &emsp; increment the capacity of the edge v-u.\
 &emsp; This opens edges to be used in the opposite direction.\
 3: repeat.\
-After an augmenting path has been found, a matrix storing which edges are used is updated, and used to update every path.\
+After an augmenting path has been found, a matrix storing which edges are used is updated, and used to update every path.
 
 The probleme in our case is that it finds edge-disjoint paths. We need vertex (node) disjoint paths.\
 To fix that, we process the graph. Each node is split into an input node Vin and an output node Vout. Two edges are added between those two nodes which simulates node capacity, Vin to Vout has capacity 1, and Vout to Vin has capacity 0.\
