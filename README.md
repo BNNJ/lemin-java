@@ -33,7 +33,7 @@ cat "mapfile" | java Lemin
 |-h --help| Display help|
 |-p --print| Echo the input to the standard input|
 |-c --color| Colorize ants|
-|--ants X| Manually assigns number of ants to X, if X is a valid integer|
+|--ants X| Manually set number of ants to X, if X is a valid integer|
 
 ## How does it work ?
 
