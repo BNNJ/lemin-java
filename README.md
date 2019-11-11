@@ -15,7 +15,7 @@ This is my first java program. I chose this project because I had been wanting t
 Appart from implementation, this version also has a few minor differences with the one submited to 42:\
 The parser is less restrictive, as invalid lines don't raise an error and stop the processing. A simple warning is issued instead.\
 Less options, no visualizer. Use the C version if you want a graphical representation of what is going on.\
-Although cleaner, this version is also much slower. Whether this is due to the language or the algorithm, i'm not quite sure. I'll answer that after imlementing this solution in C or C++.
+Although cleaner, this version is also much slower. Whether this is due to the language or the algorithm, i'm not quite sure. I'll answer that after implementing this solution in C or C++.
 
 ## Usage
 Compile with\
