@@ -154,6 +154,8 @@ public class	Solver {
 
 	/**
 	 * Reduces the paths to account for the doubled nodes.
+	 * This is done by skipping every other node, which correspond to the
+	 * output part of the input/ouput node pair.
 	 */
 	public static void	reducePaths(int end) {
 		for (Path p : paths) {

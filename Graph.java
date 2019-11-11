@@ -56,6 +56,8 @@ public class Graph {
 
 	/**
 	 * Start in and End out are dissociated from the rest of the graph
+	 * We don't want to completely remove them, as it would mess up the indexing
+	 * of all the other nodes.
 	 */
 	public void		unlinkBounds(int start, int end) {
 		for (int i = 0; i < nbNodes; ++i) {
