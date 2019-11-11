@@ -25,12 +25,10 @@ Run with :
 ```console
 foo@bar:~$ java Lemin [-h/p/c] [--ants X]
 ```
-exemple: 
+examples: 
 ```console
-foo@bar:~$ java Lemin < "mapfile"
-```
-```console
-foo@bar:~$ cat "mapfile" | java Lemin
+foo@bar:~$ java Lemin  --ants 23 < "mapfile"
+foo@bar:~$ cat "mapfile" | java Lemin -pc
 ```
 
 | Option | Effect |
@@ -42,7 +40,7 @@ foo@bar:~$ cat "mapfile" | java Lemin
 
 ## How does it work ?
 
-The main algorithm is based on Edmonds-Karp algorithm, which is ued to find the maximum flow in a network (represented by a graph), in our case the maze the ants must go though.\
+The main algorithm is based on Edmonds-Karp algorithm, which is used to find the maximum flow in a network (represented by a graph), in our case the maze the ants must go though.\
 Here's the basics of it:
 1. run a breadth first search on the graph to find the shortest path from the source node to the sink. If a path was found, keep going. Otherwise, there is no augmenting path left, so we stop.
 2. update the edges in this way:\
