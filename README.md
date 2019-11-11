@@ -45,12 +45,13 @@ foo@bar:~$ cat "mapfile" | java Lemin
 The main algorithm is based on Edmonds-Karp algorithm, which is ued to find the maximum flow in a network (represented by a graph), in our case the maze the ants must go though.\
 Here's the basics of it:
 1. run a breadth first search on the graph to find the shortest path from the source node to the sink. If a path was found, keep going. Otherwise, there is no augmenting path left, so we stop.
-2. update the edges in this way:
-&emsp; for each pair of consecutive nodes u and v of the path found,
+2. update the edges in this way:\
+&emsp; for each pair of consecutive nodes u and v of the path found,\
 &emsp; decrement the capacity of the edge u-v by the flow of that path (1 here),\
 &emsp; increment the capacity of the edge v-u.\
 &emsp; This opens edges to be used in the opposite direction.
 3. repeat.\
+
 After an augmenting path has been found, a matrix storing which edges are used is updated, and used to update every path.
 
 The problem in our case is that there cannot be more than one ant in a room: rooms have a capacity of 1, thus we need to find vertex-disjoint paths. Edmonds-karp algorithm is typically used to find edge-disjoint paths, in networks where edges have capacity, not rooms.\
