@@ -17,15 +17,15 @@ Less options, no visualizer. Use the C version if you want a graphical represent
 Although cleaner, this version is also much slower. Whether this is due to the language or the algorithm, i'm not quite sure. I'll answer that after implementing this solution in C or C++.
 
 ## Usage
-Compile with :
+Compile with:
 ```console
 foo@bar:~$ javac Lemin.java
 ```
-Run with :
+Run with:
 ```console
 foo@bar:~$ java Lemin [-h/p/c] [--ants X]
 ```
-examples: 
+Examples: 
 ```console
 foo@bar:~$ java Lemin  --ants 23 < "mapfile"
 foo@bar:~$ cat "mapfile" | java Lemin -pc
@@ -48,7 +48,7 @@ Here's the basics of it:
 &emsp; decrement the capacity of the edge u-v by the flow of that path (1 here),\
 &emsp; increment the capacity of the edge v-u.\
 &emsp; This opens edges to be used in the opposite direction.
-3. repeat.\
+3. repeat.
 
 After an augmenting path has been found, a matrix storing which edges are used is updated, and used to update every path.
 
